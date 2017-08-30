@@ -44,6 +44,8 @@ public class SettingsLoader {
 	private String password;
 	private String proxy;
 	private String hostname;
+	private String startTime;
+	private String endTime;
 	private String computeMethod;
 	private String gpu;
 	private String cores;
@@ -63,12 +65,14 @@ public class SettingsLoader {
 		path = path_;
 	}
 	
-	public SettingsLoader(String login_, String password_, String proxy_, String hostname_, ComputeType computeMethod_, GPUDevice gpu_, int cores_, int maxRam_, int maxRenderTime_, String cacheDir_, boolean autoSignIn_, String ui_, String tileSize_, int priority_) {
+	public SettingsLoader(String login_, String password_, String proxy_, String hostname_, String startTime_, String endTime_, ComputeType computeMethod_, GPUDevice gpu_, int cores_, int maxRam_, int maxRenderTime_, String cacheDir_, boolean autoSignIn_, String ui_, String tileSize_, int priority_) {
 		path = getDefaultFilePath();
 		login = login_;
 		password = password_;
 		proxy = proxy_;
 		hostname = hostname_;
+		startTime = startTime_;
+		endTime = endTime_;
 		cacheDir = cacheDir_;
 		autoSignIn = String.valueOf(autoSignIn_);
 		ui = ui_;
@@ -150,6 +154,14 @@ public class SettingsLoader {
 			if (hostname != null) {
 				prop.setProperty("hostname", hostname);
 			}
+
+			if (startTime != null) {
+				prop.setProperty("startTime", startTime);
+			}
+
+			if (endTime != null) {
+				prop.setProperty("endTime", endTime);
+			}
 			
 			if (autoSignIn != null) {
 				prop.setProperty("auto-signin", autoSignIn);
@@ -200,6 +212,8 @@ public class SettingsLoader {
 		this.password = null;
 		this.proxy = null;
 		this.hostname = null;
+		this.startTime = "0:00";
+		this.endTime = "0:00";
 		this.computeMethod = null;
 		this.gpu = null;
 		this.cacheDir = null;
@@ -259,6 +273,14 @@ public class SettingsLoader {
 			if (prop.containsKey("hostname")) {
 				this.hostname = prop.getProperty("hostname");
 			}
+
+			if (prop.containsKey("startTime")) {
+				this.startTime = prop.getProperty("startTime");
+			}
+
+			if (prop.containsKey("endTime")) {
+				this.endTime = prop.getProperty("endTime");
+			}
 			
 			if (prop.containsKey("auto-signin")) {
 				this.autoSignIn = prop.getProperty("auto-signin");
@@ -315,6 +337,14 @@ public class SettingsLoader {
 		
 		if ((config.getHostname() == null || config.getHostname().isEmpty() || config.getHostname().equals(config.getDefaultHostname())) && hostname != null) {
 			config.setHostname(hostname);
+		}
+
+		if ((config.getStartTime() == null || config.getStartTime() == "0:00") && startTime != "0:00") {
+			config.setStartTime(startTime);
+		}
+
+		if ((config.getEndTime() == null || config.getEndTime() == "0:00") && endTime != "0:00") {
+			config.setEndTime(endTime);
 		}
 		
 		if (config.getPriority() == 19) { // 19 is default value

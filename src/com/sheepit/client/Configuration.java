@@ -61,12 +61,16 @@ public class Configuration {
 	private String UIType;
 	private int tileSize;
 	private String hostname;
+	private String startTime;
+	private String endTime;
 	
 	public Configuration(File cache_dir_, String login_, String password_) {
 		this.login = login_;
 		this.password = password_;
 		this.proxy = null;
 		this.hostname = this.getDefaultHostname();
+		this.startTime = "0:00";
+		this.endTime = "0:00";
 		this.static_exeDirName = "exe";
 		this.maxUploadingJob = 1;
 		this.nbCores = -1; // ie not set
@@ -276,9 +280,21 @@ public class Configuration {
 	public void setHostname(String hostname_) {
 		this.hostname = hostname_;
 	}
+
+	public void setStartTime(String startTime_) { this.startTime = startTime_; }
+
+	public void setEndTime(String endTime_) { this.endTime = endTime_; }
 	
 	public String getHostname() {
 		return this.hostname;
+	}
+
+	public String getStartTime() {
+		return this.startTime;
+	}
+
+	public String getEndTime() {
+		return this.endTime;
 	}
 	
 	public String getDefaultHostname() {

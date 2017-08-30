@@ -58,6 +58,8 @@ import com.sheepit.client.network.Proxy;
 import com.sheepit.client.os.OS;
 import com.sheepit.client.standalone.GuiSwing;
 
+import com.github.lgooddatepicker.components.TimePicker;
+
 public class Settings implements Activity {
 	private static final String DUMMY_CACHE_DIR = "Auto detected";
 	
@@ -76,6 +78,8 @@ public class Settings implements Activity {
 	private JSlider priority;
 	private JTextField proxy;
 	private JTextField hostname;
+	private TimePicker startTime;
+	private TimePicker endTime;
 	
 	private JCheckBox saveFile;
 	private JCheckBox autoSignIn;
@@ -139,7 +143,7 @@ public class Settings implements Activity {
 		constraints.gridy = currentRow;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		parent.getContentPane().add(authentication_panel, constraints);
-		
+
 		// directory
 		JPanel directory_panel = new JPanel(new GridLayout(1, 3));
 		directory_panel.setBorder(BorderFactory.createTitledBorder("Cache"));
@@ -320,9 +324,22 @@ public class Settings implements Activity {
 		parent.getContentPane().add(compute_devices_panel, constraints);
 		
 		// other
-		JPanel advanced_panel = new JPanel(new GridLayout(5, 2));
+		JPanel advanced_panel = new JPanel(new GridLayout(7, 2));
 		advanced_panel.setBorder(BorderFactory.createTitledBorder("Advanced options"));
-		
+
+		JLabel startTimeLabel = new JLabel("Start Time:");
+		startTime = new TimePicker();
+		startTime.setText(parent.getConfiguration().getStartTime());
+
+		JLabel endTimeLabel = new JLabel("End Time:");
+		endTime = new TimePicker();
+		endTime.setText(parent.getConfiguration().getEndTime());
+
+		advanced_panel.add(startTimeLabel);
+		advanced_panel.add(startTime);
+		advanced_panel.add(endTimeLabel);
+		advanced_panel.add(endTime);
+
 		JLabel proxyLabel = new JLabel("Proxy:");
 		proxyLabel.setToolTipText("http://login:password@host:port");
 		proxy = new JTextField();
@@ -587,6 +604,16 @@ public class Settings implements Activity {
 					System.exit(2);
 				}
 			}
+
+			String startTimeText = null;
+			if(startTime != null && startTime.getText().equals(parent.getConfiguration().getStartTime()) == false) {
+				startTimeText = startTime.getText();
+			}
+
+			String endTimeText = null;
+			if(endTime != null && endTime.getText().equals(parent.getConfiguration().getEndTime()) == false) {
+				endTimeText = endTime.getText();
+			}
 			
 			String tile = null;
 			if (customTileSize.isSelected() && tileSizeValue != null) {
@@ -617,7 +644,7 @@ public class Settings implements Activity {
 			}
 			
 			if (saveFile.isSelected()) {
-				new SettingsLoader(login.getText(), new String(password.getPassword()), proxyText, hostnameText, method, selected_gpu, cpu_cores, max_ram, max_rendertime, cachePath, autoSignIn.isSelected(), GuiSwing.type, tile, priority.getValue()).saveFile();
+				new SettingsLoader(login.getText(), new String(password.getPassword()), proxyText, hostnameText, startTimeText, endTimeText, method, selected_gpu, cpu_cores, max_ram, max_rendertime, cachePath, autoSignIn.isSelected(), GuiSwing.type, tile, priority.getValue()).saveFile();
 			}
 			else {
 				try {
